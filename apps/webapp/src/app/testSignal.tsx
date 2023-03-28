@@ -42,7 +42,14 @@ export function TestSignal() {
           signal={lastName}
         />
       </div>
-      <div>FullName: {fullName.value}</div>
+      <div>
+        <InputField
+          label="Full:"
+          name="full"
+          signal={fullName}
+          readOnly={true}
+        />
+      </div>
     </div>
   );
 }
