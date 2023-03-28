@@ -1,3 +1,4 @@
+import produce from 'immer';
 import { useEffect, useReducer } from 'react';
 import { signal, computed, effect, batch, Signal } from 'usignal';
 
@@ -8,9 +9,19 @@ const fullName = computed(() => `${firstName} ${lastName}`);
 export function TestSignal() {
   const [, render] = useReducer((x) => x + 1, 0);
   useEffect(() => {
+    let value = {
+      first: firstName.value,
+      last: lastName.value,
+    };
     const dispose = effect(() => {
-      const value = fullName.value;
-      render();
+      const updated = produce(value, (draft) => {
+        draft.first = firstName.value;
+        draft.last = lastName.value;
+      });
+      if (updated !== value) {
+        value = updated;
+        render();
+      }
     });
     return dispose;
   }, []);
