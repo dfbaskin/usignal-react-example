@@ -1,6 +1,7 @@
 import produce from 'immer';
 import { useEffect, useReducer } from 'react';
 import { signal, computed, effect, batch, Signal } from 'usignal';
+import InputField from './inputField';
 
 const firstName = signal('John');
 const lastName = signal('Doe');
@@ -28,26 +29,18 @@ export function TestSignal() {
   return (
     <div>
       <div>
-        <label>
-          <span>First</span>
-          <input
-            name="first"
-            value={firstName.value}
-            onChange={(evt) => {
-              firstName.value = evt.target.value;
-            }}
-          />
-        </label>
-        <label>
-          <span>Last</span>
-          <input
-            name="last"
-            value={lastName.value}
-            onChange={(evt) => {
-              lastName.value = evt.target.value;
-            }}
-          />
-        </label>
+        <InputField
+          label="First:"
+          name="first"
+          signal={firstName}
+        />
+      </div>
+      <div>
+        <InputField
+          label="Last:"
+          name="last"
+          signal={lastName}
+        />
       </div>
       <div>FullName: {fullName.value}</div>
     </div>
