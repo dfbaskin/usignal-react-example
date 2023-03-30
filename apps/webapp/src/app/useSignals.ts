@@ -12,6 +12,7 @@ export function useSignals(signals: SignalType[]) {
   useEffect(() => {
     const dispose = effect(() => {
       for (const signal of signalsRef.current ?? []) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         signal.value;
       }
       render();
