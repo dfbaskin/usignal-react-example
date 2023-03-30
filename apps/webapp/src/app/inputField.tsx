@@ -1,5 +1,3 @@
-import { useEffect, useReducer } from 'react';
-import { signal, computed, effect, batch, Signal } from 'usignal';
 import { useSignals } from './useSignals';
 
 interface Props {
@@ -14,14 +12,6 @@ interface Props {
 export function InputField(props: Props) {
   const { label, name, signal, readOnly } = props;
   useSignals([signal]);
-  // const [, render] = useReducer((x) => x + 1, 0);
-  // useEffect(() => {
-  //   const dispose = effect(() => {
-  //     signal.value;
-  //     render();
-  //   });
-  //   return dispose;
-  // }, [signal]);
 
   return (
     <label>
