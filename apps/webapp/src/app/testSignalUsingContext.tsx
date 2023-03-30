@@ -1,6 +1,6 @@
 import { signal, computed } from 'usignal';
-import InputField from './inputField';
-import { SignalsProvider, useSignalsContext } from './useSignalsContext';
+import InputField2 from './inputField2';
+import { SignalsProvider } from './useSignalsContext';
 
 function defineSignals() {
   const firstName = signal('John');
@@ -22,24 +22,19 @@ export function TestSignalUsingContext() {
 }
 
 function TestSignalContent() {
-  const { firstName, lastName, fullName } = useSignalsContext({
-    firstName: null,
-    lastName: null,
-    fullName: null,
-  });
   return (
     <div>
       <div>
-        <InputField label="First:" name="first" signal={firstName} />
+        <InputField2 label="First:" name="first" signalName="firstName" />
       </div>
       <div>
-        <InputField label="Last:" name="last" signal={lastName} />
+        <InputField2 label="Last:" name="last" signalName="lastName" />
       </div>
       <div>
-        <InputField
+        <InputField2
           label="Full:"
           name="full"
-          signal={fullName}
+          signalName="fullName"
           readOnly={true}
         />
       </div>
