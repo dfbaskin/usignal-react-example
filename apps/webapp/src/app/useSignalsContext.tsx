@@ -1,11 +1,14 @@
-import { createContext, ReactNode, useContext, useMemo, useRef } from 'react';
-import { useSignals } from './useSignals';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useRef,
+  useSyncExternalStore,
+} from 'react';
+import { effect } from 'usignal';
 
-export type SignalsType<T = unknown> = {
-  value: T;
-};
-
-export type SignalsContextType = Record<string, SignalsType>;
+export type SignalsContextType = Record<string, unknown>;
 
 const signalsContext = createContext<SignalsContextType>({});
 
@@ -23,16 +26,46 @@ export function SignalsProvider(props: {
   return <Provider value={signalsRef.current}>{children}</Provider>;
 }
 
-export function useSignalsContext<T extends { [key: string]: null }>(
-  signals: T
+export function useSignalsContext<T extends SignalsContextType>(
+  signals: Partial<{
+    [key in keyof T]: null;
+  }>
 ) {
+  type SelectedSignalsType = Pick<T, keyof typeof signals>;
+  type SignalsRefType = {
+    updateCount: number;
+    selectedSignals: SelectedSignalsType;
+  }
+
   const ctx = useContext(signalsContext);
-  const selectedSignals = useMemo(
-    () => Object.fromEntries(Object.keys(signals).map((k) => [k, ctx[k]])),
-    [ctx, signals]
+
+  const signalsRef = useRef<SignalsRefType>();
+  if (!signalsRef.current) {
+    signalsRef.current = {
+      updateCount: 0,
+      selectedSignals: Object.fromEntries(
+        Object.keys(signals).map((k) => [k, ctx[k]])
+      ) as SelectedSignalsType
+    };
+  }
+
+  const subscribe = useCallback((callback: () => void) => {
+    return effect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      for (const signal of Object.values(signalsRef.current!.selectedSignals)) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        signal.value;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      signalsRef.current!.updateCount += 1;
+      callback();
+    });
+  }, []);
+
+  useSyncExternalStore(
+    subscribe,
+    () => signalsRef.current?.updateCount
   );
-  useSignals(Object.values(selectedSignals));
-  return selectedSignals as {
-    [key in keyof T]: SignalsType<string>; // hack to string
-  };
+
+  return signalsRef.current.selectedSignals;
 }

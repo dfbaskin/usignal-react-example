@@ -1,5 +1,3 @@
-import { useSignals } from './useSignals';
-
 interface Props {
   label: string;
   name: string;
@@ -11,7 +9,6 @@ interface Props {
 
 export function InputField(props: Props) {
   const { label, name, signal, readOnly } = props;
-  useSignals([signal]);
 
   return (
     <label>
