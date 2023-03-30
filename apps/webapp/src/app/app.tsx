@@ -1,11 +1,15 @@
 import styles from './app.module.scss';
-import TestSignal from './testSignal';
+import TestSignalUsingContext from './testSignalUsingContext';
+import TestSignalUsingGlobals from './testSignalUsingGlobals';
 
 export function App() {
   return (
     <div className={styles['container']}>
       <h1>uSignal/React</h1>
-      <TestSignal />
+      <h2>Using Global Signals</h2>
+      <TestSignalUsingGlobals />
+      <h2>Using Signals on Context</h2>
+      <TestSignalUsingContext />
     </div>
   );
 }

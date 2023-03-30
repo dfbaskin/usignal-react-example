@@ -5,7 +5,7 @@ const firstName = signal('John');
 const lastName = signal('Doe');
 const fullName = computed(() => `${firstName} ${lastName}`);
 
-export function TestSignal() {
+export function TestSignalUsingGlobals() {
   return (
     <div>
       <div>
@@ -26,4 +26,4 @@ export function TestSignal() {
   );
 }
 
-export default TestSignal;
+export default TestSignalUsingGlobals;
